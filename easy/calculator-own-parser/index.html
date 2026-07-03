@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input id = "input"  placeholder="enter the expression">
+    <button  onclick=calculate()> evaluate</button>
+
+    <script>
+         function calculate(){
+            let mexp = document.getElementById("input").value
+            let result = extract(mexp)
+            alert(result)
+            //result code
+         }
+
+         function extract(exp){
+            let tokens =  exp.match(/\d+(\.\d+)?|[+\/*-]/g)
+            const operators = [];
+            const values = []
+            function applyop(){
+              let b = values.pop()
+              let a  = values.pop()
+              let op = operators.pop()
+                switch(op)
+                {
+                    case "+":
+                     values.push(a + b);
+                     break;
+                    case '-':
+                        values.push(a - b);
+                        break;
+                    case '*':
+                        values.push(a * b);
+                        break;
+                    case '/':
+                        values.push(a / b);
+                        break;
+                }
+
+                    
+                }
+
+         function precedence(op){
+          if (op === '+' || op === '-')return 1
+          if (op === '*' || op === '/')return 2 
+
+
+         }
+
+
+         for(let token of tokens)
+         {
+            if(!isNaN(token)){
+                values.push(Number(token));
+
+            }else {
+             while (  operators.length && precedence(operators[operators.length-1]) >= precedence(token))
+            {
+                applyop()
+            
+            
+            }
+            operators.push(token)
+        }
+         }
+          while (operators.length) {
+                applyop();
+            }
+
+            return values[0];
+        }
+    </script>
+
+</body>
+</html>
