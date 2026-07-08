@@ -13,6 +13,7 @@ function addnote(){
  const save = document.createElement('button')
  save.textContent="save"
  save.onclick = savefunction;
+ 
  note.appendChild(save)
  function savefunction(){
    
@@ -25,7 +26,9 @@ function addnote(){
    const arr = JSON.parse(localStorage.getItem("mess")) ||[]
     arr.push(obj);
    localStorage.setItem("mess", JSON.stringify(arr))
+     note.remove(); // remove the temporary note
 
+loadnote();
    let output = ""
    for(let x of arr)
    {
@@ -46,6 +49,8 @@ function addnote(){
 function loadnote (){
    
     const conatainer = document.getElementById("note-container");
+   
+    conatainer.innerHTML = "";
     const arra = JSON.parse(localStorage.getItem("mess")) || [];
     for(let x of arra){
        const oldnote =  document.createElement("div")
@@ -55,11 +60,23 @@ function loadnote (){
         inp.value = x.message
         const save2 = document.createElement('button')
  save2.textContent="save"
+    save2.onclick = savenew;
+    function savenew(){
+         for(let i of arra){
+          if( i.id == x.id){
+            i.message = inp.value
+          }
+         }
+     
 
+   localStorage.setItem("mess", JSON.stringify(arra))
+    
+    }
  
         conatainer.append(oldnote)
     oldnote.appendChild(inp)
     oldnote.appendChild(save2)
+    
     }
     
 }
